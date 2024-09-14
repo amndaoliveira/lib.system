@@ -1,43 +1,57 @@
-
-import java.util.LinkedList;
-import java.util.Queue;
-
 class Livro {
     private String titulo;
-    private int anoPublicacao;
-
-    public Livro(String titulo, int anoPublicacao) {
-        this.titulo = titulo;
-        setAnoPublicacao(anoPublicacao);
+    private int anoPublicado;
+    private boolean emprestado;
+    
+    public Livro(String titulo, int anoPublicado) {
+        this.titulo=titulo; 
+        this.anoPublicado = anoPublicado;
+        this.emprestado = false; // livro começa sempre como nao emprestado
+    }
+    
+    public boolean isEmprestado(){ 
+        return this.emprestado;
+    }
+    public void setEmprestado(boolean emprestado){
+        this.emprestado = emprestado;
     }
 
-    public String getTitulo() {
-        return titulo;
+    public String getTitulo(){
+       return this.titulo;
     }
-
-    public void setTitulo(String titulo) {
-        this.titulo = titulo;
+    public int getAnoPublicado(){
+        return this.anoPublicado;
     }
-
-    public int getAnoPublicacao() {
-        return anoPublicacao;
+    public String setTitulo(String titulo){
+        return this.titulo = titulo;
     }
-
-    public void setAnoPublicacao(int anoPublicacao) {
-        if (anoPublicacao < 1440) {
-            System.out.println("Ano de publicação não pode ser menor que 1440. Definindo para 1440."); // implementar o throws(?)
-            this.anoPublicacao = 1440;
-        } else if (anoPublicacao > 2024) {
-            System.out.println("Ano de publicação não pode ser no futuro. Definindo para 2024."); // // implementar o throws(?)
-            this.anoPublicacao = 2024;
+    public void setAnoPublicado(int anoPublicado){
+        this.anoPublicado = anoPublicado;
+        regraDeValidacao(); // verifica e ajusta, se necessário, assim que é alterado;
+    }
+    
+    private boolean regraDeValidacao(){
+        if (this.anoPublicado < 1440 ){
+            System.out.println("Falha: ano de publicação inválido");
+            setAnoPublicado(1440); //define o ano publicado como 1440
+            return false;
+        } else if (this.anoPublicado > 2024){ 
+            System.out.println("Falha: ano de publicação inválido");
+            setAnoPublicado(2024); //define o ano publicado como 2024
+            return false;
         } else {
-            this.anoPublicacao = anoPublicacao;
+            return true;
         }
     }
-
+    
     @Override
     public String toString() {
-        return "[" + titulo + ", " + anoPublicacao + "]";
+        
+        if (!regraDeValidacao()){
+            return null;
+        } else {
+        String str = "[" + this.titulo + ", " + this.anoPublicado + "]";
+        return str;
+        }
     }
 }
-

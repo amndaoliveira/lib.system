@@ -1,50 +1,56 @@
-
 class Leitor {
-  private String nome;
-  private Livro livroEmprestado;
-  private int quantidadeEmprestimos;
+    private String nome;
+    private int quantidadeEmprestimos;
+    private Livro livroEmprestado;
+    
+    public Leitor(String nome, int quantidadeEmprestimos) {
+        this.nome = nome;
+        this.quantidadeEmprestimos = quantidadeEmprestimos;
+        this.livroEmprestado = null; //inicializa sem livro emprestado
+    }
 
-  public Leitor(String nome) {
-      this.nome = nome;
-      this.livroEmprestado = null;
-      this.quantidadeEmprestimos = 0;
-  }
+    public String getNome() {
+        return this.nome;
+    }
 
-  public boolean possuiLivroEmprestado() {
-      return livroEmprestado != null;
-  }
+    // Verificar se já possui um livro emprestado (possuiLivroEmprestado)
+    public boolean possuiLivroEmprestado(){
+        if(this.livroEmprestado!=null){ // se o array de livros nao estiver vazio, nao pode pegar o livro
+            System.out.println("Falha: leitor ja possui um livro");
+            return true;
+        } 
+        return false;
+    }
+    
+    public void realizarEmprestimo(Livro livroEmprestado) {
+        if (possuiLivroEmprestado()) { // Se o leitor já tem um livro emprestado
+                System.out.println(this.nome + " já possui um livro emprestado.");    
+        }
+        if (livroEmprestado.isEmprestado()) { // Se o livro já está emprestado para outra pessoa
+                System.out.println("Falha: livro indisponível.");
+        }
+       
+        this.livroEmprestado = livroEmprestado; // Empresta o livro ao leitor
+        this.quantidadeEmprestimos++; // Incrementa o número de empréstimos
+        livroEmprestado.setEmprestado(true); // Marca o livro como emprestado
+        System.out.println(this.nome + " realizou o empréstimo. Total de empréstimos: " + this.quantidadeEmprestimos);
+    }
 
-  public String getNome() {
-      return nome;
-  }
+    public Livro realizarDevolucao() {
+        if (!possuiLivroEmprestado()) { // Se não tem livro emprestado
+            System.out.println("Falha: " + this.nome + " não possui um livro para devolver.");
+            return null;
+        }
+        Livro livroDevolvido = this.livroEmprestado; // devolve o livro emprestado
+        this.livroEmprestado = null; // livor emprestado volta a ficar disponível para os leitores
+        livroDevolvido.setEmprestado(false); // livro volta a ficar disp no sistema
+        System.out.println(this.nome + "devolveu o livro"+ livroDevolvido);
+        return livroDevolvido;
+    }
 
-  public int getQuantidadeEmprestimos() {
-      return quantidadeEmprestimos;
-  }
-
-  public void realizarEmprestimo(Livro livro) {
-      if (!possuiLivroEmprestado()) {
-          this.livroEmprestado = livro;
-          this.quantidadeEmprestimos++;
-          System.out.println(nome + " já pegou " + quantidadeEmprestimos + " livro(s) emprestado(s)");
-      } else {
-          System.out.println("Falha: leitor já possui um livro"); // implementar o throws
-      }
-  }
-
-  public Livro realizarDevolucao() {
-      if (possuiLivroEmprestado()) {
-          Livro livroDevolvido = livroEmprestado;
-          livroEmprestado = null;
-          return livroDevolvido;
-      } else {
-          System.out.println("Falha: leitor não possui um livro para devolver."); // implementar o throws
-          return null;
-      }
-  }
-
-  @Override
-  public String toString() {
-      return "[" + nome + (possuiLivroEmprestado() ? "+" : "-") + ", " + quantidadeEmprestimos + "]";
-  }
+    @Override
+    public String toString() {
+        String possuiLivro = possuiLivroEmprestado() ? "+" : "-"; 
+        return "["+ this.nome + possuiLivro + ", " + this.quantidadeEmprestimos + "]";
+        }
 }
