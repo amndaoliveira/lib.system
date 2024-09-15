@@ -11,53 +11,66 @@ class Biblioteca {
         this.leitoresFila = new LinkedList<>();
         this.capacidade = capacidade;
     }
+
     //Adicionar livros na biblioteca (sempre no primeiro espaço vazio da lista de livros).
     public boolean adicionarLivro(Livro livroAdd) {
-        if(livros.size()< capacidade){
-            livros.add(livroAdd);
+        
+         if (livros.size() < capacidade){
+            livros.addLast(livroAdd);
             return true;
-        }
+         }
+         
         System.out.println("Falha: biblioteca cheia");
         return false;
-
-        // for(int i=0; i< livros.length; i++){  // percorre todas as posições 
-        //     if(livros[i]==null){ // ao encontrar a 1a posição vazia, 
-        //         livros[i] = livroAdd; // adiciona o livro na primeira posição vazia
-        //         return true; // retorna true indicando que o livro foi adicionado na posição [i] de livros
-        //     }
-        // }
-        // System.out.println("Falha: biblioteca está cheia"); // se não encontrar nenhuma "vazia"
-        // return false; // sinalizando que não foi possivel add pq a linkedlist está cheia
     }
+
     // Registrar um leitor na fila de espera (sempre no final da fila de leitores)
     public void registrarLeitor(Leitor addLeitoresFimDaFila) {
         leitoresFila.addLast(addLeitoresFimDaFila); // se usar so o add(), mudaria algo?
     }
     // Emprestar um livro para o próximo (primeiro) leitor da fila
     public boolean emprestarLivro(int numeroDoLivroEmprestado) {
-        // Remover o leitor da fila após o empréstimo.
-        // Garantir que o livro ainda não tenha sido emprestado.
-
         if(leitoresFila.isEmpty()){ // Verificar se a fila de leitores está vazia.
             System.out.println("Falha: fila de leitores vazia"); // nao pode emprestar
             return false;
         } 
 
-        if(numeroDoLivroEmprestado < 0 || numeroDoLivroEmprestado >= livros.size() ) { // Verificar se o índice do livro é válido
-            System.out.println("Falha: índice de livro inválido");
+        Leitor leitor = leitoresFila.getFirst();
+        Livro livro = null;
+        try {
+            livro = livros.get(numeroDoLivroEmprestado);
+        } catch (Exception e){
+            System.out.println("Falha: index invalido"); // nao pode emprestar
+        }
+        
+      
+        /**
+         * Verificar se o leitor já possui um livro emprestado
+         * - mostrar uma mensagem de erro caso possua.
+         */
+        if (leitor.possuiLivroEmprestado()) {
+            System.out.println("Falha: possui livro emprestado");
             return false;
         }
 
-        Livro livro = livros.get(numeroDoLivroEmprestado); //explicar oq isso faz
-        if(livro == null || livro.isEmprestado() ){ // Verifica se o livro existe ou (ja está emprestado)<- fazer essa parte 
+        /**
+         * Verificar se há algum livro disponível no índice indicado
+         * - mostrar uma mensagem de erro caso não haja.
+         */
+        if(livro == null) {
+            System.out.println("Falha: livro não encontrado");
+            return false;
+        }
+
+        if(livro == null || livro.isEmprestado() ){ // Verifica se o livro existe ou ja está emprestado
             System.out.println("Falha: livro já está emprestado");
             return false;
         }
         // Empresta o livro ao leitor da 1 posição e remove-lo da fila
-        Leitor leitor = leitoresFila.removeFirst();
-        livro.setEmprestado(true); // livro emprestado
-        leitor.realizarEmprestimo(livro);
-        System.out.println("Livro emprestado ao leitor: " + leitor.getNome()); // mostra que o livro foi emprestado ao respectivo leitor
+        // Leitor leitor = leitoresFila.removeFirst();
+        // livro.setEmprestado(true); // livro emprestado
+        // leitor.realizarEmprestimo(livro);
+        // System.out.println("Livro emprestado ao leitor: " + leitor.getNome()); // mostra que o livro foi emprestado ao respectivo leitor
         return true;
     }
     //Receber o livro a ser devolvido pelo próximo (primeiro) leitor da fila
@@ -87,10 +100,17 @@ class Biblioteca {
 
     @Override
     public String toString() {
+        int espacoDisponivel = capacidade - livros.size(); // dif cpaacidade e tam da lista
         String str = "Livros: {";
-        for (Livro livro : livros){
+
+        for (Livro livro : livros){    
             str+= (livro != null ? livro.toString() : "[-----]") + " ";
         }
+        
+        for (int i = espacoDisponivel; i > 0; i--) {
+            str+= ("[-----]");
+        }
+
         str+= "}\n";
 
         str+= "Fila de leitores: {";

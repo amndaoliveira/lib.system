@@ -14,6 +14,7 @@ class Main {
             else if ( parts[0].equals("show")       )  { System.out.println( bib );                           }
             else if ( parts[0].equals("init")       )  { bib = new Biblioteca( Integer.parseInt(parts[1]) );  }
             else if ( parts[0].equals("leitor")     )  { bib.registrarLeitor( new Leitor( parts[1], 0 ) );    }
+            else if ( parts[0].equals("livro")     )  {  bib.adicionarLivro( new Livro( parts[1], Integer.parseInt(parts[2])) );    }
             else if ( parts[0].equals("emprestar")  )  { bib.emprestarLivro( Integer.parseInt(parts[1]) );    }
             else if ( parts[0].equals("receber")    )  { bib.receberLivro(Integer.parseInt(parts[1]));                                  }
             else                                      { System.out.println("fail: comando invalido");         }
