@@ -4,13 +4,12 @@ desenvolva um sistema de gerenciamento de uma biblioteca. O sistema deve ser c
 **classes implementadas**
 
 **Classe Livro**
-    * Atributos privados: titulo (String) e anoPublicacao (int).
-    * Construtor que inicializa titulo e anoPublicacao.
-    * Métodos públicos para obter (getTitulo, getAnoPublicacao) e definir (setTitulo, setAnoPublicacao) esses atributos.
-        * Regra de validação:
-            * O ano de publicação não deve ser menor que 1440 (ano em que a imprensa foi inventada) e não pode ser no futuro. Caso contrário, mostrar mensagem de erro e corrigir o ano para 1440 ou 2024.
-    * Método público toString.
-        * Formato: [Iracema, 1865]
+Atributos privados: titulo (String) e anoPublicacao (int).
+Construtor que inicializa titulo e anoPublicacao.
+Métodos públicos para obter (getTitulo, getAnoPublicacao) e definir (setTitulo, setAnoPublicacao) esses atributos.
+   Regra de validação:   O ano de publicação não deve ser menor que 1440 (ano em que a imprensa foi inventada) e não pode ser no futuro. Caso contrário, mostrar mensagem de erro e corrigir o ano para 1440 ou 2024.
+Método público toString.
+Formato: [Iracema, 1865]
 
 **Classe Leitor**
     * Atributos privados: nome (String), livroEmprestado (Livro) e quantidadeEmprestimos (int).
