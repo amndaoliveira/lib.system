@@ -34,22 +34,16 @@ class Biblioteca {
             System.out.println("Falha: fila de leitores vazia"); // nao pode emprestar
             return false;
         } 
+       // Leitor leitor = leitoresFila.getFirst();
+        Leitor leitor = leitoresFila.removeFirst();
+        Livro livro = livros.get(numeroDoLivroEmprestado);
 
-        Leitor leitor = leitoresFila.getFirst();
-        Livro livro = null;
-        try {
-            livro = livros.get(numeroDoLivroEmprestado);
-        } catch (Exception e){
-            System.out.println("Falha: index invalido"); // nao pode emprestar
-        }
-        
-      
         /**
          * Verificar se o leitor já possui um livro emprestado
          * - mostrar uma mensagem de erro caso possua.
          */
         if (leitor.possuiLivroEmprestado()) {
-            System.out.println("Falha: possui livro emprestado");
+            System.out.println("Falha: o leitor já possui livro emprestado");
             return false;
         }
 
@@ -57,6 +51,7 @@ class Biblioteca {
          * Verificar se há algum livro disponível no índice indicado
          * - mostrar uma mensagem de erro caso não haja.
          */
+
         if(livro == null) {
             System.out.println("Falha: livro não encontrado");
             return false;
@@ -67,10 +62,10 @@ class Biblioteca {
             return false;
         }
         // Empresta o livro ao leitor da 1 posição e remove-lo da fila
-        // Leitor leitor = leitoresFila.removeFirst();
-        // livro.setEmprestado(true); // livro emprestado
-        // leitor.realizarEmprestimo(livro);
-        // System.out.println("Livro emprestado ao leitor: " + leitor.getNome()); // mostra que o livro foi emprestado ao respectivo leitor
+        leitor.realizarEmprestimo(livro);
+        livro.setEmprestado(true); // livro emprestado
+        //adicionar o 1º leitor no fim da fila
+        leitoresFila.addLast(leitor);
         return true;
     }
     //Receber o livro a ser devolvido pelo próximo (primeiro) leitor da fila

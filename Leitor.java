@@ -15,8 +15,7 @@ class Leitor {
 
     // Verificar se já possui um livro emprestado (possuiLivroEmprestado)
     public boolean possuiLivroEmprestado(){
-        if(this.livroEmprestado!=null){ // se o array de livros nao estiver vazio, nao pode pegar o livro
-            System.out.println("Falha: leitor ja possui um livro");
+        if(this.livroEmprestado!=null && livroEmprestado.isEmprestado()){ // se o array de livros nao estiver vazio, nao pode pegar o livro ou se o livro a ser emprestado já estiver emprestado
             return true;
         } 
         return false;
@@ -33,7 +32,7 @@ class Leitor {
         this.livroEmprestado = livroEmprestado; // Empresta o livro ao leitor
         this.quantidadeEmprestimos++; // Incrementa o número de empréstimos
         livroEmprestado.setEmprestado(true); // Marca o livro como emprestado
-        System.out.println(this.nome + " realizou o empréstimo. Total de empréstimos: " + this.quantidadeEmprestimos);
+        System.out.println(this.nome + " realizou o empréstimo");
     }
 
     public Livro realizarDevolucao() {
