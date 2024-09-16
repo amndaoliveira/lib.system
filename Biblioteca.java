@@ -15,6 +15,10 @@ class Biblioteca {
     //Adicionar livros na biblioteca (sempre no primeiro espaço vazio da lista de livros).
     public boolean adicionarLivro(Livro livroAdd) {
         
+        /**
+         * Step 1 - se tem capacidade
+                    1.1 - realizar validacao do livro antes de adicionar na lista
+         */
          if (livros.size() < capacidade){
             livros.addLast(livroAdd);
             return true;
@@ -34,6 +38,10 @@ class Biblioteca {
             System.out.println("Falha: fila de leitores vazia"); // nao pode emprestar
             return false;
         } 
+        if(livros.isEmpty()){
+            System.out.println("falha: biblioteca vazia");
+            return false;
+        }
        // Leitor leitor = leitoresFila.getFirst();
         Leitor leitor = leitoresFila.removeFirst();
         Livro livro = livros.get(numeroDoLivroEmprestado);
@@ -51,16 +59,19 @@ class Biblioteca {
          * Verificar se há algum livro disponível no índice indicado
          * - mostrar uma mensagem de erro caso não haja.
          */
-
-        if(livro == null) {
-            System.out.println("Falha: livro não encontrado");
+        if(numeroDoLivroEmprestado < 0 || numeroDoLivroEmprestado >= livros.size()){
+            System.out.println("Falha: biblioteca vazia");
             return false;
         }
+        //if(livro == null) {
+        //     System.out.println("Falha: livro não encontrado");
+        //     return false;
+        // }
 
-        if(livro == null || livro.isEmprestado() ){ // Verifica se o livro existe ou ja está emprestado
-            System.out.println("Falha: livro já está emprestado");
-            return false;
-        }
+        // if(livro == null || livro.isEmprestado() ){ // Verifica se o livro existe ou ja está emprestado
+        //     System.out.println("Falha: livro já está emprestado");
+        //     return false;
+        // }
         // Empresta o livro ao leitor da 1 posição e remove-lo da fila
         leitor.realizarEmprestimo(livro);
         livro.setEmprestado(true); // livro emprestado
@@ -76,12 +87,19 @@ class Biblioteca {
             return false;
         }
         //se o indice do livro é valido
-        if (numeroDoLivroEmprestado <0 || numeroDoLivroEmprestado >=livros.size()){
+        if (numeroDoLivroEmprestado < 0 || numeroDoLivroEmprestado >=livros.size()){
             System.out.println("Falha: índice de livro inválido");
             return false;
         }
-        //s eo livro já está emprestado
-        Livro livro = livros.get(numeroDoLivroEmprestado);
+        //se o livro já está emprestado
+        Livro livro = null;
+        try {
+            livro = livros.get(numeroDoLivroEmprestado);
+        } catch (Exception e){
+            System.out.println("Falha: index errado");
+        }
+
+        
         if (!livro.isEmprestado()) {
             System.out.println("Falha: livro não está emprestado");
         return false;
