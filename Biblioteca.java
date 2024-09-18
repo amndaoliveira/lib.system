@@ -123,7 +123,7 @@ class Biblioteca {
 
         //se a devolução ocorrer 
         livroDevolvido.setEmprestado(false); // atribui como não emprestado, ja que foi devolvido
-        leitorAtual.realizarDevolucao();
+        leitorAtual.realizarDevolucao(); // passar o livro como parametro(?)
         System.out.println("Livro devolvido pelo leitor: " + leitorAtual.getNome()); // mostra quem devolveu o livro
         leitoresFila.addLast(leitorAtual);
         return true;
