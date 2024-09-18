@@ -36,15 +36,7 @@ class Leitor {
     }
 
     public Livro realizarDevolucao() {
-        if (!possuiLivroEmprestado()) { // Se não tem livro emprestado
-            System.out.println("Falha: " + this.nome + " não possui um livro para devolver.");
-            return null;
-        }
-        Livro livroDevolvido = this.livroEmprestado; // devolve o livro emprestado
-        this.livroEmprestado = null; // livor emprestado volta a ficar disponível para os leitores
-        livroDevolvido.setEmprestado(false); // livro volta a ficar disp no sistema
-        System.out.println(this.nome + "devolveu o livro"+ livroDevolvido);
-        return livroDevolvido;
+        return null;
     }
 
     @Override

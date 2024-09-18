@@ -15,6 +15,10 @@ class Biblioteca {
     //Adicionar livros na biblioteca (sempre no primeiro espaço vazio da lista de livros).
     public boolean adicionarLivro(Livro livroAdd) {
         
+        /**
+         * Step 1 - se tem capacidade
+                    1.1 - realizar validacao do livro antes de adicionar na lista
+         */
          if (livros.size() < capacidade){
             livros.addLast(livroAdd);
             return true;
@@ -34,6 +38,18 @@ class Biblioteca {
             System.out.println("Falha: fila de leitores vazia"); // nao pode emprestar
             return false;
         } 
+        if(livros.isEmpty()){
+            System.out.println("falha: biblioteca vazia");
+            return false;
+        }
+                /**
+         * Verificar se há algum livro disponível no índice indicado
+         * - mostrar uma mensagem de erro caso não haja.
+         */
+        if(numeroDoLivroEmprestado < 0 || numeroDoLivroEmprestado >= livros.size()){
+            System.out.println("Falha: indice do livro inválido");
+            return false;
+        }
        // Leitor leitor = leitoresFila.getFirst();
         Leitor leitor = leitoresFila.removeFirst();
         Livro livro = livros.get(numeroDoLivroEmprestado);
@@ -41,31 +57,32 @@ class Biblioteca {
         /**
          * Verificar se o leitor já possui um livro emprestado
          * - mostrar uma mensagem de erro caso possua.
-         */
+         * acho que está redundante, tem a mesmas infos em leitor
+         */ 
         if (leitor.possuiLivroEmprestado()) {
             System.out.println("Falha: o leitor já possui livro emprestado");
+            leitoresFila.addLast(leitor);
+            return false;
+        }
+        
+        if(livro.isEmprestado()){
+            System.out.println("Falha: livro já emprestado");
+            leitoresFila.addLast(leitor);
             return false;
         }
 
-        /**
-         * Verificar se há algum livro disponível no índice indicado
-         * - mostrar uma mensagem de erro caso não haja.
-         */
 
-        if(livro == null) {
-            System.out.println("Falha: livro não encontrado");
-            return false;
-        }
+        //if(livro == null) {
+        //     System.out.println("Falha: livro não encontrado");
+        //     return false;
+        // }
 
-        if(livro == null || livro.isEmprestado() ){ // Verifica se o livro existe ou ja está emprestado
-            System.out.println("Falha: livro já está emprestado");
-            return false;
-        }
         // Empresta o livro ao leitor da 1 posição e remove-lo da fila
         leitor.realizarEmprestimo(livro);
         livro.setEmprestado(true); // livro emprestado
         //adicionar o 1º leitor no fim da fila
         leitoresFila.addLast(leitor);
+        // System.out.println(leitor.getNome() + " realizou o empréstimo");
         return true;
     }
     //Receber o livro a ser devolvido pelo próximo (primeiro) leitor da fila
@@ -76,20 +93,39 @@ class Biblioteca {
             return false;
         }
         //se o indice do livro é valido
-        if (numeroDoLivroEmprestado <0 || numeroDoLivroEmprestado >=livros.size()){
+        if (numeroDoLivroEmprestado < 0 || numeroDoLivroEmprestado >=livros.size()){
             System.out.println("Falha: índice de livro inválido");
+            leitoresFila.addLast(leitoresFila.removeFirst()); // coloca o 1 da fila no fim da fila.
             return false;
         }
-        //s eo livro já está emprestado
-        Livro livro = livros.get(numeroDoLivroEmprestado);
-        if (!livro.isEmprestado()) {
-            System.out.println("Falha: livro não está emprestado");
-        return false;
-        } 
-        Leitor leitor = leitoresFila.remove();
-        livro.setEmprestado(false); // atribui como não emprestado, ja que foi devolvido
-        leitor.realizarDevolucao();
-        System.out.println("Livro devolvido pelo leitor: " + leitor.getNome()); // mostra quem devolveu o livro
+        // O leitor que está no início da fila
+        Leitor leitorAtual = leitoresFila.remove(); // ou removeFirst();
+        Livro livroDevolvido = livros.get(numeroDoLivroEmprestado);
+
+        if(!livroDevolvido.isEmprestado()){
+            System.out.println("Falha: o livro não está emprestado");
+            leitoresFila.addLast(leitorAtual);
+            return false;
+        }
+
+        //se o leitor não tiver livro para devolver 
+        if(!leitorAtual.possuiLivroEmprestado()){
+            System.out.println("Falha: o leitor não possui  livro para devolver");
+            leitoresFila.addLast(leitorAtual); // Move o leitor para o fim da fila
+            return false;
+        }
+    
+        // try {
+        //     livroDevolvido = livros.get(numeroDoLivroEmprestado);
+        // } catch (Exception e){
+        //     System.out.println("Falha: index errado");
+        // }
+
+        //se a devolução ocorrer 
+        livroDevolvido.setEmprestado(false); // atribui como não emprestado, ja que foi devolvido
+        leitorAtual.realizarDevolucao(); // passar o livro como parametro(?)
+        System.out.println("Livro devolvido pelo leitor: " + leitorAtual.getNome()); // mostra quem devolveu o livro
+        leitoresFila.addLast(leitorAtual);
         return true;
     }
 

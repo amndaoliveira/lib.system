@@ -7,6 +7,7 @@ class Livro {
         this.titulo=titulo; 
         this.anoPublicado = anoPublicado;
         this.emprestado = false; // livro começa sempre como nao emprestado
+        // regraDeValidacao();
     }
     
     public boolean isEmprestado(){ 
@@ -26,8 +27,7 @@ class Livro {
         return this.titulo = titulo;
     }
     public void setAnoPublicado(int anoPublicado){
-        this.anoPublicado = anoPublicado;
-        regraDeValidacao(); // verifica e ajusta, se necessário, assim que é alterado;
+        this.anoPublicado = anoPublicado; // verifica e ajusta, se necessário, assim que é alterado;
     }
     
     private boolean regraDeValidacao(){
@@ -47,11 +47,7 @@ class Livro {
     @Override
     public String toString() {
         
-        if (!regraDeValidacao()){
-            return null;
-        } else {
-        String str = "[" + this.titulo + ", " + this.anoPublicado + "]";
+        String str = emprestado ? "[-----]" : "[" + this.titulo + ", " + this.anoPublicado + "]";
         return str;
-        }
     }
 }
