@@ -7,7 +7,7 @@ class Livro {
         this.titulo=titulo; 
         this.anoPublicado = anoPublicado;
         this.emprestado = false; // livro começa sempre como nao emprestado
-        regraDeValidacao();
+        // regraDeValidacao();
     }
     
     public boolean isEmprestado(){ 
