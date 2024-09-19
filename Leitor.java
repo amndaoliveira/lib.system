@@ -15,10 +15,11 @@ class Leitor {
 
     // Verificar se já possui um livro emprestado (possuiLivroEmprestado)
     public boolean possuiLivroEmprestado(){
-        if(this.livroEmprestado!=null && livroEmprestado.isEmprestado()){ // se o array de livros nao estiver vazio, nao pode pegar o livro ou se o livro a ser emprestado já estiver emprestado
-            return true;
-        } 
-        return false;
+        
+        // if(this.livroEmprestado!=null && livroEmprestado.isEmprestado()){ // se o array de livros nao estiver vazio, nao pode pegar o livro ou se o livro a ser emprestado já estiver emprestado
+        //     return true;
+        // } 
+        return this.livroEmprestado!=null;
     }
     
     public void realizarEmprestimo(Livro livroEmprestado) {
@@ -37,6 +38,10 @@ class Leitor {
 
     public Livro realizarDevolucao() {
         return null;
+    }
+
+    public void setRemoverLivroEmprestado(){
+        this.livroEmprestado = null;
     }
 
     @Override
