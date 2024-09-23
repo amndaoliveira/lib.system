@@ -1,43 +1,45 @@
-class Leitor {
+class Leitor extends Usuario {
+    /* não se fazem mais necessários devido a herança
     private String nome;
-    private int quantidadeEmprestimos;
+    private int quantidadeEmprestimos;*/ 
     private Livro livroEmprestado;
     
     public Leitor(String nome, int quantidadeEmprestimos) {
+        /*não se fazem mais necessários devido a herança
         this.nome = nome;
-        this.quantidadeEmprestimos = quantidadeEmprestimos;
+        this.quantidadeEmprestimos = quantidadeEmprestimos;*/
+        super(nome);
         this.livroEmprestado = null; //inicializa sem livro emprestado
     }
-
+    /*  não se faz necessário nessa nova fase devido a implementação da herança  
     public String getNome() {
         return this.nome;
-    }
+    }*/
 
     // Verificar se já possui um livro emprestado (possuiLivroEmprestado)
     public boolean possuiLivroEmprestado(){
-        
-        // if(this.livroEmprestado!=null && livroEmprestado.isEmprestado()){ // se o array de livros nao estiver vazio, nao pode pegar o livro ou se o livro a ser emprestado já estiver emprestado
-        //     return true;
-        // } 
         return this.livroEmprestado!=null;
     }
     
-    public void realizarEmprestimo(Livro livroEmprestado) {
+    public void realizarEmprestimo(ItemEmprestado livroEmprestado) throws ItemEmprestimoIndisponivelException {
         if (possuiLivroEmprestado()) { // Se o leitor já tem um livro emprestado
-                System.out.println(this.nome + " já possui um livro emprestado.");    
+            throw new ItemEmprestimoIndisponivelException ("O leitor já possui livro emprestado");
+            // System.out.println(this.nome + " já possui um livro emprestado.");    
         }
         if (livroEmprestado.isEmprestado()) { // Se o livro já está emprestado para outra pessoa
-                System.out.println("Falha: livro indisponível.");
+            throw new ItemEmprestimoIndisponivelException ("não foi possível realizar o empréstimo, o livro encontra-se indisponível");
+            // System.out.println("Falha: livro indisponível.");
         }
        
-        this.livroEmprestado = livroEmprestado; // Empresta o livro ao leitor
+        this.livroEmprestado = (Livro) livroEmprestado; // Empresta o livro ao leitor
         this.quantidadeEmprestimos++; // Incrementa o número de empréstimos
         livroEmprestado.setEmprestado(true); // Marca o livro como emprestado
-        System.out.println(this.nome + " realizou o empréstimo");
+        System.out.println(this.nome + " realizou o empréstimo") + livroEmprestrado.getTitulo());
     }
-
+    @Override
     public Livro realizarDevolucao() {
-        return null;
+        // return null;
+        
     }
 
     public void setRemoverLivroEmprestado(){
@@ -49,4 +51,10 @@ class Leitor {
         String possuiLivro = possuiLivroEmprestado() ? "+" : "-"; 
         return "["+ this.nome + possuiLivro + ", " + this.quantidadeEmprestimos + "]";
         }
+    /*
+    @Override
+    public String toString() {
+        return super.toString() + (possuiLivroEmprestado() ? " + (livro emprestado)" : " -");
+    }
+     */
 }

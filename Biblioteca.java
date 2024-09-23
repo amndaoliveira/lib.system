@@ -13,8 +13,7 @@ class Biblioteca {
     }
 
     //Adicionar livros na biblioteca (sempre no primeiro espaço vazio da lista de livros).
-    public boolean adicionarLivro(Livro livroAdd) {
-        
+    public boolean adicionarLivro(Livro livroAdd) throws BibliotecaException {
         /**
          * Step 1 - se tem capacidade
                     1.1 - realizar validacao do livro antes de adicionar na lista
@@ -23,8 +22,8 @@ class Biblioteca {
             livros.addLast(livroAdd);
             return true;
          }
-         
-        System.out.println("Falha: biblioteca cheia");
+        //System.out.println("Falha: biblioteca cheia");
+        throw new BibliotecaException("Falha: biblioteca cheia");
         return false;
     }
 
@@ -61,6 +60,16 @@ class Biblioteca {
             leitoresFila.addLast(leitor);
             return false;
         }
+        // validar essa opção
+        // try {
+        //     leitor.realizarEmprestimo(livro);
+        //     leitoresFila.addLast(leitor);
+        //     return true;
+        // } catch (ItemEmprestimoIndisponivelException e) {
+        //     System.out.println(e.getMessage());
+        //     leitoresFila.addLast(leitor); // Retorna o leitor à fila
+        //     return false;
+        // }
 
         /**
          * Verificar se o leitor já possui um livro emprestado
@@ -96,6 +105,19 @@ class Biblioteca {
         // O leitor que está no início da fila
         Leitor leitorAtual = leitoresFila.remove(); // ou removeFirst();
         Livro livroDevolvido = livros.get(numeroDoLivroEmprestado);
+
+        /*
+        try {
+            leitorAtual.realizarDevolucao(); // Tenta realizar a devolução
+            livroDevolvido.setEmprestado(false); // Marca o livro como não emprestado
+            leitoresFila.addLast(leitorAtual);
+            return true;
+        } catch (ItemEmprestimoIndisponivelException e) {
+            System.out.println(e.getMessage());
+            leitoresFila.addLast(leitorAtual); // Retorna o leitor à fila
+            return false;
+        }
+         */
 
         if(!livroDevolvido.isEmprestado()){
             System.out.println("Falha: o livro não está emprestado");

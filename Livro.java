@@ -1,15 +1,27 @@
-class Livro {
-    private String titulo;
+class Livro extends ItemEmprestado {
+
     private int anoPublicado;
-    private boolean emprestado;
-    
-    public Livro(String titulo, int anoPublicado) {
+    private Genero genero;  // enum para gênero
+    /* 
+    * private String titulo; 
+    * private boolean emprestado;
+    */ 
+
+    public Livro(String titulo, int anoPublicado, Genero genero) {
         this.titulo=titulo; 
         this.anoPublicado = anoPublicado;
-        this.emprestado = false; // livro começa sempre como nao emprestado
+        this.genero = genero;
+        /* this.emprestado = false; livro começa sempre como nao emprestado */
         regraDeValidacao();
     }
+    public int getPrazoDevolucao(){
+        return 30; //prazo de devolução será de 30 dias;
+    }
     
+    public Genero getGenero() {
+        return this.genero;
+    }
+
     public boolean isEmprestado(){ 
         return this.emprestado;
     }
@@ -32,11 +44,13 @@ class Livro {
     
     private boolean regraDeValidacao(){
         if (this.anoPublicado < 1440 ){
-            System.out.println("Falha: ano de publicação inválido");
+            // System.out.println("Falha: ano de publicação inválido");
+            throws new IlegalArgumentException("Falha: ano de publicação inválido");
             setAnoPublicado(1440); //define o ano publicado como 1440
             return false;
         } else if (this.anoPublicado > 2024){ 
-            System.out.println("Falha: ano de publicação inválido");
+            // System.out.println("Falha: ano de publicação inválido");
+            throws new IlegalArgumentException("Falha: ano de publicação inválido");
             setAnoPublicado(2024); //define o ano publicado como 2024
             return false;
         } else {
