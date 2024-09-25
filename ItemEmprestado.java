@@ -1,5 +1,5 @@
-class ItemEmprestado {
-  private string titulo;
+public abstract class ItemEmprestado {
+  private String titulo;
   private boolean emprestado;
 
   public ItemEmprestado (String titulo){
@@ -14,10 +14,14 @@ class ItemEmprestado {
   public void setEmprestado(boolean emprestado){
     this.emprestado = emprestado;
   }
+
+  public String setTitulo(String titulo){
+      return this.titulo = titulo;
+  }
   public String getTitulo(){
     return titulo;
   }
-
+  // Método abstrato que será implementado nas subclasses
   public abstract int getPrazoDevolucao();
   
 }

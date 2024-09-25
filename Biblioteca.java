@@ -12,8 +12,8 @@ class Biblioteca {
         this.capacidade = capacidade;
     }
 
-    //Adicionar livros na biblioteca (sempre no primeiro espaço vazio da lista de livros).
-    public boolean adicionarLivro(Livro livroAdd) throws BibliotecaException {
+    //Adicionar livros na biblioteca sempre no primeiro espaço vazio da lista de livros.
+    public boolean adicionarLivro(Livro livroAdd) throws MyException {
         /**
          * Step 1 - se tem capacidade
                     1.1 - realizar validacao do livro antes de adicionar na lista
@@ -23,22 +23,22 @@ class Biblioteca {
             return true;
          }
         //System.out.println("Falha: biblioteca cheia");
-        throw new BibliotecaException("Falha: biblioteca cheia");
-        return false;
+        throw new MyException("Falha: biblioteca cheia");
     }
 
     // Registrar um leitor na fila de espera (sempre no final da fila de leitores)
     public void registrarLeitor(Leitor addLeitoresFimDaFila) {
-        leitoresFila.addLast(addLeitoresFimDaFila); // se usar so o add(), mudaria algo?
+        leitoresFila.addLast(addLeitoresFimDaFila);
     }
+
     // Emprestar um livro para o próximo (primeiro) leitor da fila
     public boolean emprestarLivro(int numeroDoLivroEmprestado) {
-
+        //criar um throw ErrorFila ("Falha: fila de leitores vazia")
         if (leitoresFila.isEmpty()) { // Verificar se a fila de leitores está vazia.
             System.out.println("Falha: fila de leitores vazia"); // nao pode emprestar
             return false;
         } 
-
+        // throw ErrorBiblioteca ("falha: biblioteca vazia")
         if (livros.isEmpty()) {
             System.out.println("falha: biblioteca vazia");
             return false;
@@ -51,7 +51,7 @@ class Biblioteca {
             System.out.println("Falha: indice do livro inválido");
             return false;
         }
-        // Leitor leitor = leitoresFila.getFirst(); (test)
+
         Leitor leitor = leitoresFila.removeFirst();
         Livro livro = livros.get(numeroDoLivroEmprestado);
          
@@ -60,17 +60,6 @@ class Biblioteca {
             leitoresFila.addLast(leitor);
             return false;
         }
-        // validar essa opção
-        // try {
-        //     leitor.realizarEmprestimo(livro);
-        //     leitoresFila.addLast(leitor);
-        //     return true;
-        // } catch (ItemEmprestimoIndisponivelException e) {
-        //     System.out.println(e.getMessage());
-        //     leitoresFila.addLast(leitor); // Retorna o leitor à fila
-        //     return false;
-        // }
-
         /**
          * Verificar se o leitor já possui um livro emprestado
          * - mostrar uma mensagem de erro caso possua.
@@ -82,12 +71,22 @@ class Biblioteca {
             leitoresFila.addLast(leitor);
             return false;
         }
+        // Empresta o livro ao leitor.
+        try {
+            leitor.realizarEmprestimo(livro);
+            leitoresFila.addLast(leitor);
+            return true;
+        } catch (MyException e) {
+            System.out.println(e.getMessage());
+            leitoresFila.addLast(leitor); // Retorna o leitor à fila
+            return false;
+        }
 
         // Empresta o livro ao leitor da 1 posição e remove-lo da fila
-        leitor.realizarEmprestimo(livro); // erro dos sinais de Roberto - ou +
-        livro.setEmprestado(true); // livro emprestado
-        leitoresFila.addLast(leitor); //adicionar o 1º leitor no fim da fila
-        return true;
+        // leitor.realizarEmprestimo(livro); // erro dos sinais de Roberto - ou +
+        // livro.setEmprestado(true); // livro emprestado
+        // leitoresFila.addLast(leitor); //adicionar o 1º leitor no fim da fila
+        // return true;
     }
     //Receber o livro a ser devolvido pelo próximo (primeiro) leitor da fila
     public boolean receberLivro(int numeroDoLivroEmprestado) {
@@ -105,30 +104,26 @@ class Biblioteca {
         // O leitor que está no início da fila
         Leitor leitorAtual = leitoresFila.remove(); // ou removeFirst();
         Livro livroDevolvido = livros.get(numeroDoLivroEmprestado);
-
-        /*
-        try {
-            leitorAtual.realizarDevolucao(); // Tenta realizar a devolução
-            livroDevolvido.setEmprestado(false); // Marca o livro como não emprestado
-            leitoresFila.addLast(leitorAtual);
-            return true;
-        } catch (ItemEmprestimoIndisponivelException e) {
-            System.out.println(e.getMessage());
-            leitoresFila.addLast(leitorAtual); // Retorna o leitor à fila
-            return false;
-        }
-         */
-
+        
         if(!livroDevolvido.isEmprestado()){
             System.out.println("Falha: o livro não está emprestado");
             leitoresFila.addLast(leitorAtual);
             return false;
         }
-
         //se o leitor não tiver livro para devolver 
         if(!leitorAtual.possuiLivroEmprestado()){
             System.out.println("Falha: o leitor não possui  livro para devolver");
             leitoresFila.addLast(leitorAtual); // Move o leitor para o fim da fila
+            return false;
+        }        
+        try {
+            leitorAtual.realizarDevolucao(); // Tenta realizar a devolução
+            livroDevolvido.setEmprestado(false); // Marca o livro como não emprestado
+            leitoresFila.addLast(leitorAtual);
+            return true;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            leitoresFila.addLast(leitorAtual); // Retorna o leitor à fila
             return false;
         }
     
@@ -138,18 +133,18 @@ class Biblioteca {
         //     System.out.println("Falha: index errado");
         // }
 
-        //se a devolução ocorrer 
-        livroDevolvido.setEmprestado(false); // atribui como não emprestado, ja que foi devolvido
-        leitorAtual.realizarDevolucao(); // passar o livro como parametro(?)
-        leitorAtual.setRemoverLivroEmprestado();
-        System.out.println("Livro devolvido pelo leitor: " + leitorAtual.getNome()); // mostra quem devolveu o livro
-        leitoresFila.addLast(leitorAtual);
-        return true;
+        // se a devolução ocorrer 
+        // livroDevolvido.setEmprestado(false); // atribui como não emprestado, ja que foi devolvido
+        // leitorAtual.realizarDevolucao(); // passar o livro como parametro(?)
+        // leitorAtual.setRemoverLivroEmprestado();
+        // System.out.println("Livro devolvido pelo leitor: " + leitorAtual.getNome()); // mostra quem devolveu o livro
+        // leitoresFila.addLast(leitorAtual);
+        // return true;
     }
 
     @Override
-    public String toString() {
-        int espacoDisponivel = capacidade - livros.size(); // dif cpaacidade e tam da lista
+    public String toString() { // ajustar
+        int espacoDisponivel = capacidade - livros.size(); // dif capacidade e tam da lista
         String str = "Livros: {";
 
         for (Livro livro : livros){    

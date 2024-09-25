@@ -37,8 +37,9 @@ class Main {
                     break;
 
                 case "livro":
-                    if (validateArgs(parts, 3)) {
-                        bib.adicionarLivro(new Livro(parts[1], Integer.parseInt(parts[2])));
+                    if (validateArgs(parts, 4)) {
+                        Genero genero = Genero.valueOf(parts[3].toUpperCase()); // Converter o gênero para maiúsculas
+                        bib.adicionarLivro(new Livro(parts[1], Integer.parseInt(parts[2]), genero));
                     }
                     break;
 

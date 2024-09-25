@@ -1,5 +1,7 @@
+// import error.MyException;
+
 abstract class Usuario {
-  protected String nome;
+  protected String nome; // posso mudar para private
   protected int quantidadeEmprestimos;
 
   public Usuario (String nome){
@@ -8,7 +10,7 @@ abstract class Usuario {
   }
   
   public String getNome(){
-    reeturn nome;
+    return nome;
   }
 
   public int getQuantidadeEmprestimos(){
@@ -18,8 +20,8 @@ abstract class Usuario {
   /* método abstrato
   * cada tipo de usuário implementa 
   * da sua forma específica */
-  public abstract void realizarEmprestimo(ItemEmprestado item) throws ItemEmprestimoIndisponivelException; 
-  public abstract void realizarDevolucao() throws ItemEmprestimoIndisponivelException;
+  public abstract void realizarEmprestimo(ItemEmprestado item) throws MyException; 
+  public abstract Livro realizarDevolucao() throws MyException;
 
   @Override
   public String toString(){

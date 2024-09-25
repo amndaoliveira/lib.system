@@ -1,3 +1,3 @@
-Enum Genero{
-  ficcao, romance, fantasia, biografia, educativos, ciencia;
+enum Genero{
+  ficcao, romance, fantasia, biografia, educativos, ciencia
 }
