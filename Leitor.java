@@ -26,18 +26,17 @@ class Leitor extends Usuario {
     public void realizarEmprestimo(ItemEmprestado livroEmprestado) throws MyException {
         if (possuiLivroEmprestado()) { // Se o leitor já tem um livro emprestado
             throw new MyException ("O leitor já possui livro emprestado");
-            // System.out.println(this.nome + " já possui um livro emprestado.");    
+            // System.out.println(this.nome + " já possui um livro emprestado.");
         }
         if (livroEmprestado.isEmprestado()) { // Se o livro já está emprestado para outra pessoa
             throw new MyException ("não foi possível realizar o empréstimo, o livro encontra-se indisponível");
             // System.out.println("Falha: livro indisponível.");
         }
        
-        // this.livroEmprestado = (Livro) livroEmprestado; // Empresta o livro ao leitor
-        // this.quantidadeEmprestimos++; // Incrementa o número de empréstimos
-        // livroEmprestado.setEmprestado(true); // Marca o livro como emprestado
-        // System.out.println(super.getNome() + "realizou o empréstimo: " + livroEmprestado.getTitulo());
-        // System.out.println(this.nome + " realizou o empréstimo") + livroEmprestrado.getTitulo());
+         this.livroEmprestado = (Livro) livroEmprestado; // Empresta o livro ao leitor
+         this.quantidadeEmprestimos++; // Incrementa o número de empréstimos
+         livroEmprestado.setEmprestado(true); // Marca o livro como emprestado
+         System.out.println(super.getNome() + " realizou o empréstimo do livro " + livroEmprestado.getTitulo());
     }
     @Override
     public Livro realizarDevolucao() throws MyException {

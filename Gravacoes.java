@@ -1,14 +1,14 @@
 public class Gravacoes extends ItemEmprestado{
 
-  public Gravacoes(String titulo, int anoPublicado, Genero genero){
-    super(titulo,anoPublicado, genero);
+  public Gravacoes(String titulo, int anoPublicado){
+    super(titulo,anoPublicado, Genero.GRAVACOES);
     regraDeValidacao();
   }
 
-  @Override
-  public Genero getGenero(){
-    return this.genero; // definir o geneor apenas para gravações, caso nao seja emitir msg de erro
-  }
+//  @Override
+//  public Genero getGenero(){
+//    return this.genero; // definir o genero apenas para gravações, caso nao seja emitir msg de erro
+//  }
 
   @Override
   public int getPrazoDevolucao(){
@@ -16,12 +16,12 @@ public class Gravacoes extends ItemEmprestado{
   }
 
   @Override
-  protected boolean regraDeValidacao(){
-    if (this.anoPublicado < 1895 ){
+  public boolean regraDeValidacao(){
+    if (super.anoPublicado < 1895 ){
         setAnoPublicado(1895);
         throw new MyException("Falha: não há gravação neste período.");
 
-    } else if (this.anoPublicado > 2024){ 
+    } else if (super.anoPublicado > 2024){
         setAnoPublicado(2024);
         throw new MyException("Falha: não há gravações do futuro ;D. ");
     } else {
@@ -31,8 +31,8 @@ public class Gravacoes extends ItemEmprestado{
 
   @Override
   public String toString() {
-      
-      String str = isEmprestado() ? "[-----]" : "[" + getTitulo() + ", " + this.anoPublicado + ", "+ getGenero() + "]";
+
+      String str = isEmprestado() ? "[-----]" : "[" + getTitulo() + ", " + this.anoPublicado + ", "+ super.genero + "]";
       return str;
   }
 }
